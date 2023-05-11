@@ -29,7 +29,7 @@ const PORT = 3001;
 });*/
 conn.sync({force: true})
   .then(() => {
-    console.log('Conexión a la base de datos exitosa');
+    console.log('Successful connection to the database');
   })
   .then(() => {
     // Iniciar el servidor una vez que la conexión y la sincronización estén completas
@@ -38,5 +38,5 @@ conn.sync({force: true})
     });
   })
   .catch((error) => {
-    console.error('Error al conectar con la base de datos:', error);
+    console.error('Error connecting to the database:', error);
   });
