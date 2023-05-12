@@ -1,12 +1,14 @@
-import { } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../stylesheets/LandingPage.css";
 import React from "react";
 
 const LandingPage = ({ handleRecipes })=> {
 
+    const navigate = useNavigate();
+
     const handleEnterButton = () =>{
-        console.log("Hola");
-        history.push("/home");
+        handleRecipes();
+        navigate("/home");
     }
 
     return(
