@@ -18,10 +18,10 @@ let errorCount = 0; // Contador de errores
 const get100Recipes = async (req, res) => {
   try {
     // Fetch 100 recipes
-    while (recipes.length < 10) {
+    while (recipes.length < 100) {
       // Error handling for each recipe
       try {
-        let response = await axios(`${API1}${id}${API2}${API_KEY}`);
+        let response = await axios(`${API1}${id}${API2}${API_KEY2}`);
 
         recipes.push(response.data);
         errorCount = 0; // Reestart the error counter in success

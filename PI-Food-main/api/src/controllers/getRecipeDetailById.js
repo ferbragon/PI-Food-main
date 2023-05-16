@@ -7,7 +7,9 @@ const Recipe = conn.models.Recipe;
 const getRecipeDetailById = async (req, res) => {
   try {
     const { idRecipe } = req.params;
-    const recipeInDb = await Recipe.findByPk(idRecipe);
+    const id = idRecipe.slice(1);
+    
+    const recipeInDb = await Recipe.findByPk(parseInt(id));
 
     if (recipeInDb) return res.status(200).json(recipeInDb);
     const { data } = await axios(`${API1}${idRecipe}${API2}${API_KEY2}`);
@@ -31,7 +33,8 @@ const getRecipeDetailById = async (req, res) => {
     return res.status(200).json(recipe);
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.log(error);
+    return res.status(500).json({ message: error.message, stack: error.stack });
   }
 };
 

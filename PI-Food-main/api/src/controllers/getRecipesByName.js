@@ -6,7 +6,6 @@ const { conn } = require("../db.js");
 const Recipe = conn.models.Recipe;
 
 
-//https://api.spoonacular.com/recipes/complexSearch?titleMatch=pasta&number=9&apiKey=f3f1f71572bb43cb9c8ed923d060e2d1
 const getRecipesByName = async(req, res) => {
     try{
         const { name } = req.query;
@@ -25,7 +24,7 @@ const getRecipesByName = async(req, res) => {
         });
 
         // Busca en la API
-        const { data } = await axios(`${API_TITLE}${match}&${NUMBER_OF_RECIPES}${API_TITLE2}${API_KEY}`);
+        const { data } = await axios(`${API_TITLE}${match}&${NUMBER_OF_RECIPES}${API_TITLE2}${API_KEY2}`);
 
         const recipesFromAPI = data.results.map((recipe) => {
             return {
