@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Recipe from "../components/Recipe";
 import "../stylesheets/APIRecipes.css";
 
-//Paginado
+//Pages
 const APIRecipes = () => {
 
     //Global state
-    const recipes = useSelector(state => state.allRecipes);
+    const recipes = useSelector(state => state.showRecipes);
 
     //Local state
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 12; // Page size
+    const pageSize = 9; // Page size
     const totalData = recipes.length; // All recipes
     const totalPages = Math.ceil(totalData / pageSize);
 
@@ -26,6 +26,11 @@ const APIRecipes = () => {
         setCurrentPage(pageNumber);
     };
 
+    useEffect(() =>{
+        setCurrentPage(1);
+
+    },[recipes]);
+
     return(
         <div className="apiRecipes">
             <h1>API Recipes</h1>
@@ -36,10 +41,14 @@ const APIRecipes = () => {
                             id={recipe.id}
                             title={recipe.title}
                             image={recipe.image}
+                            vegan={recipe.vegan}
+                            vegetarian={recipe.vegetarian}
+                            glutenFree={recipe.glutenFree}
+                            dietTags={recipe.dietTags}
                         />
                     ))}
                 </div>
-            <div>
+            <div className="pages">
                 <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                     Prev
                 </button>

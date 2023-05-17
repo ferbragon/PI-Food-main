@@ -2,8 +2,8 @@
   margin: 0;
   padding: 0;
   box-sizing: content-box;
-  user-select: none;
-  /*border: 1px solid black;*/
+  /*user-select: none;*/
+  border: 1px solid black;
 }
 
 .App {
