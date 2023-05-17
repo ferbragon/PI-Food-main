@@ -21,18 +21,13 @@ const { server } = require('./app.js');
 const { conn } = require('./db.js');
 const PORT = 3001;
 
-// Syncing all the models at once.
-/*conn.sync({ force: true }).then(() => {
-  server.listen(PORT, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
-  });
-});*/
-conn.sync({force: true})
+
+conn.sync({force: false})//Connect the database
   .then(() => {
     console.log('Successful connection to the database');
   })
   .then(() => {
-    // Iniciar el servidor una vez que la conexión y la sincronización estén completas
+    // Start the server after connect the database 
     server.listen(PORT, () => {
       console.log(`Server rised in port ${PORT}`);
     });
