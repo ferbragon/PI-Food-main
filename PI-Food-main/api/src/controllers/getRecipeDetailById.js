@@ -7,7 +7,8 @@ const Recipe = conn.models.Recipe;
 const getRecipeDetailById = async (req, res) => {
   try {
     const { idRecipe } = req.params;
-    const id = idRecipe.slice(1);
+    let id = idRecipe;
+    if(id[0] === ":") id = idRecipe.slice(1);
     
     const recipeInDb = await Recipe.findByPk(parseInt(id));
 
