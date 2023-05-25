@@ -13,7 +13,7 @@ const getRecipeDetailById = async (req, res) => {
     const recipeInDb = await Recipe.findByPk(parseInt(id));
 
     if (recipeInDb) return res.status(200).json(recipeInDb);
-    const { data } = await axios(`${API1}${idRecipe}${API2}${API_KEY2}`);
+    const { data } = await axios(`${API1}${idRecipe}${API2}${API_KEY}`);
 
     if (!data) throw Error("Recipe not found");
 
