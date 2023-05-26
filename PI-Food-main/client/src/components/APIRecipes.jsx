@@ -4,15 +4,19 @@ import Recipe from "../components/Recipe";
 import "../stylesheets/APIRecipes.css";
 import Loading from "./Loading";
 
+
 //Pages
-const APIRecipes = ({ openRecipeDetail }) => {
+const APIRecipes = ({ openRecipeDetail, searchMode, handleSearchMode }) => {
+
+
     //Global state
     const recipes = useSelector(state => state.showRecipes);
-
+    
     //Local state
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 9; // Page size
+    let pageSize = 9; // Page size
+    if(searchMode) pageSize = 18;
     const totalData = recipes.length; // All recipes
     const totalPages = Math.ceil(totalData / pageSize);
 
@@ -27,18 +31,22 @@ const APIRecipes = ({ openRecipeDetail }) => {
     };
 
     useEffect(() => {
+        setCurrentPage(1);
+    },[recipes, searchMode]);
+
+    useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-          }, 180000);
-    }, []);
+          }, 2200);
+    }, [recipes]);
 
     return (
-        <div className="apiRecipes">
+        <div className={!searchMode ? "apiRecipes" : "apiRecipesSearchMode"}>
             <h1 className="titleApiRecipes">API Recipes</h1>
             {loading ? (
                 <Loading />
             ) : (
-                <div className="recipesGrid">
+                <div className={!searchMode ? "recipesGrid" : "recipesGridSearchMode"}>
                     {currentPageData.map((recipe) => (
                         <Recipe
                             key={recipe.id}
@@ -57,21 +65,24 @@ const APIRecipes = ({ openRecipeDetail }) => {
             )}
             <div className="pages">
                 <button
+                    className="buttonPagesApi"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
-                    Prev
+                    &lt;
                 </button>
                 <span>
                     Page {currentPage} of {totalPages}
                 </span>
                 <button
+                    className="buttonPagesApi"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === Math.ceil(totalData / pageSize)}
                 >
-                    Next
+                    &gt;
                 </button>
             </div>
+            <button className="buttonSearchMode" onClick={handleSearchMode}>{!searchMode ? "<" : ">" }</button>
         </div>
     );
 };

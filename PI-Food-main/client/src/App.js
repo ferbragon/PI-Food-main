@@ -10,13 +10,12 @@ import { allDiets, fetchAllRecipes, fetchDataBaseRecipes } from './redux/actions
 
 
 function App() {
-
   const dispatch = useDispatch();
 
   const handleRecipes = async () =>{
-   await dispatch(fetchAllRecipes());
-   await dispatch(fetchDataBaseRecipes());
-   await dispatch(allDiets());
+      await dispatch(fetchAllRecipes());
+      await dispatch(fetchDataBaseRecipes());
+      await dispatch(allDiets());
   };
 
 
