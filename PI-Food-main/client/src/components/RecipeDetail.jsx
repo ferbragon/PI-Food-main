@@ -1,29 +1,37 @@
-import { useParams, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import StepByStep from "./StepByStep";
-//import "../stylesheets/RecipeDetail.css";
+import "../stylesheets/RecipeDetail.css";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { detailErrors } from "../redux/actions";
+import Loading from "./Loading";
 
 
-const RecipeDetail = () => {
+const RecipeDetail = ({ closeRecipeDetail, selectedRecipeId }) => {
 
-    const { id } = useParams();
+    const dispatch = useDispatch();
 
     const [recipe, setRecipe] = useState({});
     const [diets, setDiets] = useState([]);
+    //Loading
+    const [loading, setLoading] = useState(true);
+    //Errors
+    const [error, setError] = useState(false)
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data } = await axios(`http://localhost:3001/recipes/${id}`);
+                const { data } = await axios(`http://localhost:3001/recipes/${selectedRecipeId}`);
                 setRecipe(data);
             } catch (error) {
-                console.error(error);
+                setError(true);
+                dispatch(detailErrors(error));
             }
         }
-    
+        setError(false);
         fetchData();
-    }, [id]);
+    }, [dispatch, selectedRecipeId]);
 
     useEffect(() => {
         let newDiets = [];
@@ -35,6 +43,14 @@ const RecipeDetail = () => {
         setDiets(newDiets);
     }, [recipe]);
 
+    useEffect(() =>{
+        if(Object.keys(recipe).length !== 0 && !error){
+            setTimeout(()=>{
+                setLoading(false);
+            },600);
+        };
+    },[error, recipe, recipe.image])
+
     //Capitalize first letter 
     const capitalizeFirstLetter = (string) =>{
         let devide = string.split(" ");
@@ -43,26 +59,44 @@ const RecipeDetail = () => {
         return join;
     };
 
-    console.log(recipe.analyzedInstructions);
+    const handleImageLoad = () => {
+        setLoading(false);
+      };
+
 
     return(
         <div className="recipeDetail">
-            <button className="button-detail-close">
-              <NavLink to="/home">X</NavLink>
+            <button className="closeButtonDetail" onClick={closeRecipeDetail}>
+              X
             </button>
-            <img src={recipe.image} alt={recipe.title}/>
-            <h1>Detail Recipe</h1>
-            <h2>{recipe.id}</h2>
-            <h1>{recipe.title}</h1>
-            <h5>Health Score: {recipe.healthScore}</h5>
-            {/*<div dangerouslySetInnerHTML={{ __html: recipe.summary }} />*/}
-            <ul>
-                {diets.map((diet, index) => (
-                    <li key={index}>{capitalizeFirstLetter(diet)}</li>
-                ))}
-            </ul>
-            <span>Instructions:</span>{recipe.instructions}
-            {recipe.analyzedInstructions && <StepByStep stepByStep={recipe.analyzedInstructions}/>}
+            {loading ? <div className="loaderDetail">
+                            <Loading />
+                        </div> 
+                        
+                : <div>
+                  <div className="gradientImage">
+                    <img className="imageDetail" src={recipe.image} alt={recipe.title} onLoad={handleImageLoad}/>
+                  </div>
+                  <div className="recipeDetailFlex">
+                        <h1 className="recipeID">{recipe.id < 0 ? "DB" + recipe.id * -1 : recipe.id}</h1>
+                        <h1 className="recipeDetailTitle">{recipe.title}</h1>
+                        <h3 className="recipeDetalHS">Health Score: {recipe.healthScore}</h3>
+                        {/*<h3 className="recipeDetailSummary">Summary:</h3>
+                        <div className="recipeSummary" dangerouslySetInnerHTML={{ __html: recipe.summary }} />*/}
+                        <ul className="recipeDetailsDiets">
+                            Diets:
+                            {diets.length === 0 ? " No diets to show for this recipe" : diets.map((diet, index) => (
+                                <li key={index}>{capitalizeFirstLetter(diet)}</li>
+                            ))}
+                        </ul>
+                        <h3 className="recipeDetailInstructions">Instructions:</h3>
+                        <p className="recipeInstructions">{recipe.instructions}</p>
+                        <h3 className="recipeDetailSteps">Analyzed Instructions:</h3>
+                        {recipe.analyzedInstructions && <StepByStep className="recipeDetailStepByStep" stepByStep={recipe.analyzedInstructions}/>}
+                    </div>
+                </div>
+                    }
+            
         </div>
     )
 };
