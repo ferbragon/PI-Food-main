@@ -5,7 +5,6 @@ const path = require('path');
 const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
-const Number = require("./models/idNumber.js");
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`, {
   logging: false, // set to console.log to see the raw SQL queries
@@ -42,7 +41,6 @@ Diet.belongsToMany(Recipe, { through: "diets_recipes"});
 // Product.hasMany(Reviews);
 
 module.exports = {
-  Number,
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
 };
