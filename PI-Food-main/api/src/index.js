@@ -22,7 +22,7 @@ const { conn } = require('./db.js');
 const PORT = 3001;
 
 
-conn.sync({force: false})//Connect the database
+conn.sync({force: true})//Connect the database
   .then(() => {
     console.log('Successful connection to the database');
   })
