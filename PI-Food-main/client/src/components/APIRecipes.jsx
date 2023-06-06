@@ -37,7 +37,7 @@ const APIRecipes = ({ openRecipeDetail, searchMode, handleSearchMode }) => {
     useEffect(() => {
         setTimeout(() => {
             setLoading(false);
-          }, 2200);
+          }, 3200);
     }, [recipes]);
 
     return (
